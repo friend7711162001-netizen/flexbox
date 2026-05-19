@@ -52,15 +52,20 @@ body {
 }
 
 header {
-    padding: 24px;
+    padding: 16px 20px;
     border-bottom: 1px solid var(--border-color);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
 }
 
 header h1 {
-    font-size: 1.5rem;
+    font-size: 1.15rem;
     color: var(--primary-color);
-    margin-bottom: 16px;
+    margin-bottom: 0;
     font-weight: 700;
+    white-space: nowrap;
 }
 
 .level-selector {
@@ -68,8 +73,9 @@ header h1 {
     justify-content: space-between;
     align-items: center;
     background-color: var(--bg-color);
-    border-radius: 10px;
-    padding: 8px 16px;
+    border-radius: 8px;
+    padding: 4px 8px;
+    flex-grow: 1;
 }
 
 .nav-btn {
@@ -89,24 +95,27 @@ header h1 {
 
 #level-indicator {
     font-weight: 600;
-    font-size: 1.1rem;
+    font-size: 0.95rem;
+    white-space: nowrap;
 }
 
 .instructions {
-    padding: 24px;
+    padding: 16px 20px;
     flex-grow: 1;
     overflow-y: auto;
 }
 
 #level-title {
-    font-size: 1.3rem;
-    margin-bottom: 12px;
-    color: var(--text-main);
+    font-size: 1.6rem;
+    font-weight: 700;
+    margin-bottom: 16px;
+    color: var(--primary-color);
 }
 
 #level-description {
-    line-height: 1.6;
-    color: var(--text-light);
+    font-size: 1.15rem;
+    line-height: 1.7;
+    color: var(--text-main);
     margin-bottom: 20px;
 }
 
@@ -130,7 +139,7 @@ header h1 {
 }
 
 .editor-container {
-    padding: 24px;
+    padding: 16px 20px;
     border-top: 1px solid var(--border-color);
     background-color: #fcfcfc;
 }
