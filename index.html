@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flexbox 房間整理大作戰</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- 引入 Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- 神奇的 SVG 去背濾鏡 (利用顏色矩陣讓白色變透明) -->
+    <svg width="0" height="0" style="position:absolute; display:none;">
+        <filter id="remove-white" color-interpolation-filters="sRGB">
+            <feColorMatrix type="matrix" values="
+                1 0 0 0 0
+                0 1 0 0 0
+                0 0 1 0 0
+                -10 -10 -10 30 0" />
+        </filter>
+    </svg>
+
+    <div class="app-container">
+        <aside class="sidebar">
+            <header>
+                <h1>🧹 Flexbox 房間整理</h1>
+                <div class="level-selector">
+                    <button id="prev-btn" class="nav-btn" aria-label="上一關">&lt;</button>
+                    <span id="level-indicator">關卡 1 / 20</span>
+                    <button id="next-btn" class="nav-btn" aria-label="下一關">&gt;</button>
+                </div>
+            </header>
+
+            <section class="instructions">
+                <h2 id="level-title">第一關：載入中...</h2>
+                <p id="level-description">請稍候...</p>
+                
+                <div class="hint-section">
+                    <button id="hint-btn" class="secondary-btn">💡 需要提示嗎？</button>
+                    <div id="hint-text" class="hint-box hidden"></div>
+                </div>
+            </section>
+
+            <section class="editor-container">
+                <p class="editor-note">👇 請在此輸入 CSS 語法：</p>
+                <div class="code-editor">
+                    <!-- 行號預留 -->
+                    <div class="line-numbers">
+                        <span>1</span>
+                        <span>2</span>
+                        <span>3</span>
+                        <span>4</span>
+                        <span>5</span>
+                    </div>
+                    <div class="input-area">
+                        <div class="css-selector" id="css-selector">.room {</div>
+                        <textarea id="css-input" rows="4" placeholder="/* 在這裡輸入你的解答 */" spellcheck="false"></textarea>
+                        <div class="css-brace">}</div>
+                        <div class="emmet-hint">💡 提示：支援 Emmet 語法 (例如輸入 df 按 Tab)</div>
+                        <!-- 快速點選按鈕區 -->
+                        <div id="quick-buttons" class="quick-buttons"></div>
+                    </div>
+                </div>
+                <button id="check-btn" class="primary-btn">✨ 檢查是否過關</button>
+            </section>
+        </aside>
+
+        <!-- 右側面板：遊戲畫面 -->
+        <main class="game-area">
+            <div class="room-wrapper">
+                <!-- 木地板背景 -->
+                <div class="floor-pattern"></div>
+                
+                <!-- 系統預期的目標位置 (半透明) -->
+                <div id="target-room" class="room target-room">
+                    <!-- 物品會由 JS 動態生成 -->
+                </div>
+                
+                <!-- 玩家操作的實際物品區 -->
+                <div id="active-room" class="room active-room">
+                    <!-- 物品會由 JS 動態生成 -->
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- 全破彈出視窗 -->
+    <div id="success-modal" class="modal hidden">
+        <div class="modal-content">
+            <div class="confetti">🏆</div>
+            <h2>恭喜完成通關！</h2>
+            <p>你已經精通了所有 Flexbox 排版技巧，是真正的整理大師！</p>
+            <button id="next-level-btn" class="primary-btn">重新開始遊戲 🔄</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
