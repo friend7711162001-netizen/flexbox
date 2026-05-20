@@ -49,6 +49,8 @@ body {
     flex-direction: column;
     border-right: 2px solid var(--border-color);
     background: linear-gradient(to bottom, #ffffff, #faf9f5);
+    overflow-y: auto; /* 當螢幕高度極度不足時，允許側邊欄整體滾動，避免底部元素被切除 */
+    overflow-x: hidden;
 }
 
 header {
