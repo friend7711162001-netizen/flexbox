@@ -460,3 +460,250 @@ header h1 {
     0% { transform: scale(0.8); opacity: 0; }
     100% { transform: scale(1); opacity: 1; }
 }
+
+/* ==========================================
+   手機版 (RWD) 響應式網頁設計樣式 
+   適用於寬度小於 768px 的行動裝置
+   ========================================== */
+@media (max-width: 767px) {
+    body {
+        overflow: hidden; /* 防止手機瀏覽器整體畫面產生多餘的滾動，保持如同 App 的精緻質感 */
+        height: 100vh;
+        height: 100dvh; /* 支援現代行動裝置的動態視窗高度，避免手機瀏覽器網址列遮擋 */
+    }
+
+    .app-container {
+        width: 100vw;
+        height: 100vh;
+        height: 100dvh;
+        max-width: none;
+        border-radius: 0; /* 移除桌機版的圓角，改為滿版呈現 */
+        box-shadow: none; /* 移除桌機版外陰影 */
+        flex-direction: column; /* 由原本的橫向 flex 改為垂直 Flex 排列 */
+    }
+
+    /* 
+       利用 display: contents 的神奇屬性！
+       當 .sidebar 設為 contents 後，它本身不會在頁面中產生盒子，
+       而它的子元素 (header, .instructions, .editor-container) 
+       會直接成為外層 .app-container 的直接 Flex 子元素。
+       這樣一來，我們就可以在手機版中利用 order 屬性隨心所欲地為這四個區塊重新排序！
+    */
+    .sidebar {
+        display: contents;
+    }
+
+    /* 1. 頂部關卡選擇欄：排在最上方 */
+    header {
+        order: 1;
+        width: 100%;
+        background-color: var(--panel-bg);
+        padding: 10px 15px;
+        z-index: 10;
+        border-bottom: 1px solid var(--border-color);
+        box-shadow: 0 2px 5px rgba(0,0,0,0.02);
+    }
+
+    header h1 {
+        font-size: 1rem;
+    }
+
+    .level-selector {
+        padding: 2px 6px;
+    }
+
+    .nav-btn {
+        font-size: 1rem;
+        padding: 2px 8px;
+    }
+
+    #level-indicator {
+        font-size: 0.85rem;
+    }
+
+    /* 2. 遊戲主畫面：排在第二順位 (中間)，方便玩家在輸入 CSS 時直接在正上方看到即時變化 */
+    .game-area {
+        order: 2;
+        width: 100%;
+        flex-grow: 0; /* 禁止無限長大，透過寬度與 aspect-ratio 維持比例 */
+        flex-shrink: 0;
+        padding: 10px; /* 縮小邊距以最大化遊戲畫面的空間 */
+        background-color: #f0ece1;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .room-wrapper {
+        width: 90vw;
+        max-width: 380px; /* 限制寬度上限，避免在大螢幕手機上畫面變形 */
+        aspect-ratio: 4/3; /* 與桌機版維持相同的 4:3 比例，確保判定運算相同 */
+        box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+    }
+
+    /* 縮小手機版房間的 padding */
+    .room {
+        padding: 12px;
+    }
+
+    /* 縮小地板磁磚的大小，使其與縮小後的物品比例協調 */
+    .floor-pattern {
+        background-size: 40px 40px;
+    }
+
+    /* 
+       【非常關鍵！】等比例縮小所有房間內物品的尺寸
+       在大螢幕下物品為 140px/120px，如果手機版不縮小，在 90vw 的窄房間內
+       物品會因過大而擠在一起，甚至導致 getBoundingClientRect() 中心點判定時出現巨大誤差。
+       因此，我們在此等比例將所有物品寬高縮小 (140px -> 60px；120px -> 50px)，
+       如此一來，Flexbox 換行、分配空間的比例會跟桌面版完美一致，通關判定也將完美運作！
+    */
+    .item[data-type="bed"],
+    .item[data-type="carpet"],
+    .item[data-type="blanket"],
+    .item[data-type="vacuum"] {
+        width: 60px;
+        height: 60px;
+    }
+
+    .item[data-type="toilet"],
+    .item[data-type="glass"],
+    .item[data-type="brush"],
+    .item[data-type="rag"] {
+        width: 50px;
+        height: 50px;
+    }
+
+    /* 
+       手機版專用的微漂浮動畫
+       為了避免在縮小後的物品上因漂浮幅度太大 (原本為 8px) 導致點擊過關檢測時的誤差，
+       我們將垂直漂浮振幅調小為 4px，既保留了可愛度又提升了判定的準確度。
+    */
+    @keyframes float {
+        0% { transform: translateY(0px); }
+        50% { transform: translateY(-4px); }
+        100% { transform: translateY(0px); }
+    }
+
+    /* 3. 關卡說明與提示區：排在第三順位 (遊戲畫面下方) */
+    .instructions {
+        order: 3;
+        width: 100%;
+        padding: 10px 15px;
+        background-color: var(--panel-bg);
+        border-bottom: 1px solid var(--border-color);
+        max-height: 100px; /* 限制最大高度，避免過長擠壓到編輯器空間 */
+        overflow-y: auto; /* 若字數較多時可以在該區塊內滾動 */
+        flex-grow: 0;
+    }
+
+    #level-title {
+        font-size: 1.1rem;
+        margin-bottom: 6px;
+    }
+
+    #level-description {
+        font-size: 0.9rem;
+        line-height: 1.5;
+        margin-bottom: 8px;
+    }
+
+    .hint-section {
+        margin-top: 8px;
+    }
+
+    .secondary-btn {
+        padding: 4px 10px;
+        font-size: 0.8rem;
+    }
+
+    .hint-box {
+        margin-top: 6px;
+        padding: 8px;
+        font-size: 0.85rem;
+    }
+
+    /* 4. CSS 編輯器與按鈕區：排在第四順位 (最底部) */
+    .editor-container {
+        order: 4;
+        width: 100%;
+        flex-grow: 1; /* 佔據手機底部剩餘的全部空間 */
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        padding: 10px 15px;
+        background-color: #fcfcfc;
+        border-top: none;
+        overflow-y: auto; /* 防範有些手機螢幕過矮時可以滾動 */
+    }
+
+    .editor-note {
+        font-size: 0.8rem;
+        margin-bottom: 6px;
+    }
+
+    .code-editor {
+        margin-bottom: 8px;
+        flex-grow: 1;
+        min-height: 110px;
+    }
+
+    .line-numbers {
+        padding: 8px 6px;
+        font-size: 12px;
+    }
+
+    .input-area {
+        padding: 8px;
+    }
+
+    .css-selector, .css-brace {
+        font-size: 12px;
+    }
+
+    #css-input {
+        font-size: 12px;
+        padding-left: 10px;
+        margin-bottom: 6px;
+        height: 50px; /* 固定輸入框高度，為鍵盤開啟時留有合適緩衝 */
+    }
+
+    .emmet-hint {
+        font-size: 10px;
+        margin-top: 2px;
+        margin-bottom: 6px;
+        padding-left: 10px;
+    }
+
+    /* 快速點選按鈕區 */
+    .quick-buttons {
+        padding-left: 10px;
+        gap: 6px;
+    }
+
+    .quick-btn {
+        padding: 4px 8px;
+        font-size: 11px;
+    }
+
+    /* 檢查過關的大按鈕 */
+    .primary-btn {
+        padding: 10px;
+        font-size: 1rem;
+        width: 100%;
+    }
+
+    /* 手機版全破彈出視窗優化 */
+    .modal-content {
+        padding: 30px 20px;
+        width: 85vw;
+        max-width: 320px;
+        border-radius: 16px;
+    }
+
+    .confetti {
+        font-size: 3rem;
+        margin-bottom: 12px;
+    }
+}
+
